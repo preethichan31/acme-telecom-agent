@@ -1,0 +1,8 @@
+numpy
+openai<2.45; python_version < "3.10"  # openai-agents 0.8.4 (last 3.9 release) breaks on 2.45+
+openai; python_version >= "3.10"
+openai-agents
+eval_type_backport; python_version < "3.10"  # lets pydantic read openai-agents' `X | None` annotations on 3.9
+python-dotenv
+scikit-learn
+streamlit

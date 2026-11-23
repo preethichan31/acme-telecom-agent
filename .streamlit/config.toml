@@ -1,0 +1,8 @@
+[server]
+# Skip Streamlit's first-run email prompt (also means the browser won't auto-open;
+# open the Local URL printed in the terminal).
+headless = true
+
+[browser]
+# Opt out of Streamlit's anonymous usage statistics.
+gatherUsageStats = false
