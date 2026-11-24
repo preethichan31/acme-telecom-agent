@@ -17,7 +17,7 @@ from agents import (
     Runner,
     function_tool,
     set_default_openai_client,
-    set_tracing_disabled,
+    set_trace_processors,
 )
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -45,8 +45,10 @@ if AZURE_OPENAI_ENDPOINT:
         use_for_tracing=False,
     )
     # The SDK's built-in trace exporter uploads to api.openai.com and needs
-    # OPENAI_API_KEY; turn it off so Azure-only setups don't log warnings.
-    set_tracing_disabled(True)
+    # OPENAI_API_KEY. Remove just that exporter so Azure-only setups don't log
+    # warnings, but keep tracing itself on: set_tracing_disabled(True) would
+    # also silence any trace processor you add later for monitoring.
+    set_trace_processors([])
     MODEL_ID = os.getenv("AZURE_OPENAI_DEPLOYMENT", MODEL_ID)
 
 # ---------------------------------------------------------------------------

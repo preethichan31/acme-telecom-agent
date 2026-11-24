@@ -29,7 +29,7 @@ Open the URL shown in your terminal (usually `http://localhost:8501`), pick a si
 Set one of these in `.env`:
 
 - **OpenAI:** `OPENAI_API_KEY`. The agent uses `gpt-4.1-mini`.
-- **Azure OpenAI / Foundry:** `AZURE_OPENAI_ENDPOINT` (e.g. `https://<resource>.services.ai.azure.com/`), `AZURE_OPENAI_API_KEY`, and `AZURE_OPENAI_DEPLOYMENT` (your deployment name, e.g. `gpt-5.1`). When `AZURE_OPENAI_ENDPOINT` is set, it takes precedence over `OPENAI_API_KEY`, and the Agents SDK's built-in trace upload to OpenAI is turned off.
+- **Azure OpenAI / Foundry:** `AZURE_OPENAI_ENDPOINT` (e.g. `https://<resource>.services.ai.azure.com/`), `AZURE_OPENAI_API_KEY`, and `AZURE_OPENAI_DEPLOYMENT` (your deployment name, e.g. `gpt-5.1`). When `AZURE_OPENAI_ENDPOINT` is set, it takes precedence over `OPENAI_API_KEY`, and the Agents SDK's built-in trace exporter to OpenAI is removed. Tracing itself stays on, so any trace processor you register later still receives traces.
 
 ## Try it
 
