@@ -36,6 +36,31 @@ Set one of these in `.env`:
 - *My calls keep dropping at home*: the agent searches the troubleshooting runbooks.
 - *What's the balance on ACME-3310?*: the agent looks up the mock CRM account.
 
+## Generate traffic
+
+`traffic/generate_traffic.py` replays 47 scripted customer conversations (57 turns) through the agent, with history between turns, so you can fill a monitoring or observability tool with realistic data. The conversations in `traffic/conversations.json` are a deliberate mix, so checks have rows that should pass and rows that should fail:
+
+| Category | What it contains |
+|---|---|
+| `happy_path` | Questions the knowledge base answers |
+| `account_lookup` | Valid, suspended, unknown and lower-case account IDs |
+| `kb_gap` | Questions the knowledge base can't answer (the agent should say so) |
+| `pii` | Messages containing an SSN, a card number, an email, a phone and an address (all fake) |
+| `prompt_injection` | Jailbreaks and attempts to read other customers' accounts |
+| `competitor` | "Should I switch to a competitor?" |
+| `abusive_off_topic` | Abusive or unrelated messages |
+| `multi_turn` | 3 to 4 turn conversations that rely on earlier context |
+| `stress` | Long or multi-part messages |
+
+```bash
+python3 traffic/generate_traffic.py --dry-run                       # list what would run
+python3 traffic/generate_traffic.py                                 # one pass over everything
+python3 traffic/generate_traffic.py --category pii --category prompt_injection
+python3 traffic/generate_traffic.py --loop --interval 60            # steady trickle; Ctrl-C to stop
+```
+
+Every turn is a real model call, so a full pass costs about as much as 57 chat messages. The script reads the same `.env` as the app. If the Openlayer SDK is installed, it also tags each conversation with a user ID and a session ID.
+
 ## Project structure
 
 ```
@@ -48,6 +73,9 @@ Set one of these in `.env`:
 │   └── account_services.txt
 ├── prompts/
 │   └── system_prompt.txt           # Agent system prompt
+├── traffic/
+│   ├── generate_traffic.py         # Replays scripted conversations
+│   └── conversations.json          # 47 test conversations by category
 ├── .streamlit/
 │   └── config.toml                 # Headless mode, usage stats off
 ├── streamlit_app.py                # Streamlit chat UI
